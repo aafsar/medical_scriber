@@ -1,7 +1,7 @@
 # AI Medical Scriber - Master Progress Tracker
 
 > **Last Updated:** 2026-02-22
-> **Status:** Phase 0 Done (API keys pending), Ready for Phase 1
+> **Status:** Phase 1 Done (e2e test pending real API key), Ready for Phase 2
 
 ---
 
@@ -10,7 +10,7 @@
 | Phase | Status | Notes |
 |-------|--------|-------|
 | Phase 0: Project Setup | DONE | API keys pending (manual) |
-| Phase 1: Audio + Deepgram Transcription | NOT STARTED | |
+| Phase 1: Audio + Deepgram Transcription | DONE | e2e test pending real API key |
 | Phase 2: ElevenLabs Transcription | NOT STARTED | |
 | Phase 3: Speaker Role Mapping | NOT STARTED | |
 | Phase 4: Note Generation (Claude) | NOT STARTED | |
@@ -29,20 +29,7 @@
 
 ## Phase 1: Audio Recording + Deepgram Transcription
 
-| Task | Status | Notes |
-|------|--------|-------|
-| Verify `st.audio_input()` output format | NOT STARTED | What format/encoding does Streamlit return? Does Deepgram accept it directly or need conversion? |
-| Verify Deepgram SDK v5 response structure | NOT STARTED | Check actual response object shape in `deepgram-sdk` 5.3.2 for utterance/diarization fields |
-| Create `app.py` with basic Streamlit layout | NOT STARTED | Title, description, audio widget |
-| Implement `st.audio_input()` recording | NOT STARTED | |
-| Add audio playback in UI | NOT STARTED | |
-| Create `transcriber.py` | NOT STARTED | |
-| Implement `transcribe_deepgram()` function | NOT STARTED | `nova-2-medical`, `diarize=True` |
-| Parse Deepgram response into utterance list | NOT STARTED | `(speaker, text, start, end)` tuples |
-| Display raw diarized transcript in UI | NOT STARTED | Speaker 0 / Speaker 1 labels |
-| Test with self-recorded sample | NOT STARTED | |
-
-**Blockers:** Requires Deepgram API key from Phase 0.
+**Status:** DONE (e2e test pending real API key). Details → [`_plans/phase1/tracker_phase1.md`](phase1/tracker_phase1.md)
 
 ---
 
@@ -194,9 +181,11 @@
 |------|---------|--------|
 | `_plans/masterplan.md` | Detailed project plan | DONE |
 | `tracker_master.md` | This progress tracker | DONE |
-| `app.py` | Main Streamlit app | NOT STARTED |
-| `transcriber.py` | Deepgram + ElevenLabs logic | NOT STARTED |
+| `app.py` | Main Streamlit app | DONE (Phase 1) |
+| `transcriber.py` | Deepgram + ElevenLabs logic | DONE (Deepgram) |
 | `note_generator.py` | Claude API note generation | NOT STARTED |
+| `_plans/phase1/plan_phase1.md` | Phase 1 design doc | DONE |
+| `_plans/phase1/tracker_phase1.md` | Phase 1 task tracker | DONE |
 | `config.py` | Shared config, medical keyterms | DONE |
 | `requirements.txt` | Python dependencies | DONE |
 | `.env` | API keys (placeholder) | DONE |
