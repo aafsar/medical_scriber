@@ -242,7 +242,7 @@ PLAN
 
 ```
 medical_scriber/
-├── PROJECT_PLAN.md          # This file
+├── _plans/masterplan.md      # This file
 ├── app.py                   # Main Streamlit app (UI + orchestration)
 ├── transcriber.py           # Transcription logic (Deepgram + ElevenLabs)
 ├── note_generator.py        # Claude API note generation logic
@@ -310,151 +310,21 @@ medical_scriber/
 
 ## 6. Implementation Phases
 
-### Phase 0: Project Setup
-- [x] Create project directory
-- [x] Write project plan
-- [ ] Initialize git repo
-- [ ] Create Python virtual environment
-- [ ] Install dependencies (`requirements.txt`)
-- [ ] Create `.env` with placeholder keys
-- [ ] Create `.gitignore`
-- [ ] Obtain API keys: Deepgram, ElevenLabs, Anthropic
+Seven phases (0–6). Each phase has its own plan and tracker under `_plans/phaseN/`. See `tracker_master.md` for task-level status and the decisions log.
 
-### Phase 1: Audio Recording + Transcription (Deepgram)
-**Goal:** Record audio in the browser and get a diarized transcript from Deepgram.
-
-- [ ] Create `app.py` with basic Streamlit layout
-  - Title, description
-  - `st.audio_input()` widget for recording
-  - Audio playback
-- [ ] Create `transcriber.py` with Deepgram integration
-  - Function: `transcribe_deepgram(audio_bytes) -> list[Utterance]`
-  - Use `nova-2-medical` model with `diarize=True`
-  - Parse response into a clean list of `(speaker, text, start, end)` tuples
-- [ ] Display raw diarized transcript in the UI
-  - Speaker labels: "Speaker 0", "Speaker 1"
-- [ ] Test with a self-recorded sample conversation
-
-### Phase 2: Add ElevenLabs Transcription
-**Goal:** Add ElevenLabs as a second transcription provider for comparison.
-
-- [ ] Add ElevenLabs integration to `transcriber.py`
-  - Function: `transcribe_elevenlabs(audio_bytes) -> list[Utterance]`
-  - Use `scribe_v2` model with `diarize=True, num_speakers=2`
-  - Populate `keyterms` with common medical vocabulary from `config.py`
-  - Reconstruct utterances from word-level `speaker_id` data
-- [ ] Add provider toggle in the Streamlit UI (radio button or selectbox)
-- [ ] Display both transcripts side-by-side for comparison (optional)
-- [ ] Test both providers with the same audio and compare:
-  - Medical term accuracy
-  - Speaker separation accuracy
-  - Latency
-
-### Phase 3: Speaker Role Mapping
-**Goal:** Map generic speaker IDs to "Doctor" and "Patient" labels.
-
-- [ ] Simple approach: add two radio buttons in UI
-  - "Speaker 0 is: [Doctor / Patient]"
-  - Default: first speaker = Doctor (common in consultations)
-- [ ] Re-label transcript with Doctor/Patient tags
-- [ ] Format transcript for LLM consumption:
-  ```
-  Doctor: How can I help you today?
-  Patient: I've been having knee pain for three weeks...
-  Doctor: Can you describe the pain?
-  ```
-
-### Phase 4: Note Generation with Claude
-**Goal:** Send the labeled transcript to Claude and get structured consultation notes.
-
-- [ ] Create `note_generator.py`
-  - Function: `generate_notes(transcript, patient_info) -> dict`
-  - Build system prompt with the consultation note template (Section 3.1)
-  - Include guardrails:
-    - "Only include information explicitly stated in the transcript"
-    - "Mark sections as 'Not discussed' if no relevant information exists"
-    - "Attribute statements correctly: patient-reported vs doctor-observed"
-  - Request JSON output matching the template schema
-- [ ] Parse JSON response and handle edge cases (missing sections, malformed output)
-- [ ] Display formatted notes in the Streamlit UI
-  - Each section as an expandable/collapsible block
-  - "Not discussed" sections visually dimmed or collapsed
-
-### Phase 5: Patient Info + Polish
-**Goal:** Add manual patient information entry and UX improvements.
-
-- [ ] Add sidebar form for patient metadata:
-  - Name, DOB, Date of Service
-  - Referring Physician (optional)
-  - Specialty (dropdown: Orthopedics, Cardiology, Neurology, etc.)
-- [ ] Merge patient info into the generated note header
-- [ ] Add "Download Notes" button (Markdown file)
-- [ ] Add basic error handling:
-  - No audio recorded
-  - API call failures (timeout, auth errors)
-  - Empty or too-short recordings
-- [ ] Add processing status indicators (spinners, progress messages)
-
-### Phase 6: Testing with Realistic Scenarios
-**Goal:** Validate the full pipeline end-to-end with realistic conversations.
-
-- [ ] Write 2-3 sample consultation scripts in `sample_scripts/`
-  - Orthopedic: knee pain (provided in Section 3.3)
-  - Cardiology: chest pain evaluation
-  - General: follow-up with multiple problems
-- [ ] Record each script (two people reading the roles, or solo with voice changes)
-- [ ] Run through full pipeline with both transcription providers
-- [ ] Document comparison results:
-  - Which provider had better medical term accuracy?
-  - Which had better diarization?
-  - How accurate were the generated notes?
-- [ ] Identify and fix any issues found
+| Phase | Goal |
+|-------|------|
+| 0 | Project setup: repo, venv, deps, config, API keys |
+| 1 | Audio recording + Deepgram transcription with diarization |
+| 2 | ElevenLabs transcription + provider comparison |
+| 3 | Speaker role mapping (Speaker 0/1 → Doctor/Patient) |
+| 4 | Claude-powered consultation note generation |
+| 5 | Patient info form, download, error handling, polish |
+| 6 | End-to-end testing with realistic consultation scripts |
 
 ---
 
-## 7. Key Design Decisions
-
-| Decision | Choice | Reasoning |
-|----------|--------|-----------|
-| **No database** | Files only (download notes as Markdown) | Simplicity for a toy app; no persistence needed |
-| **No authentication** | None | Local development only |
-| **No real-time streaming** | Batch processing after recording | Simpler to implement; streaming is a v2 feature |
-| **JSON output from Claude** | Structured extraction | Enables programmatic rendering; cleaner than parsing free text |
-| **Two transcription providers** | Deepgram + ElevenLabs | Compare quality; learn both APIs |
-| **Simplified note format** | Hybrid SOAP/H&P | Covers CMS essentials while staying implementable |
-
----
-
-## 8. API Keys Required
-
-| Service | Sign Up | Free Tier |
-|---------|---------|-----------|
-| **Deepgram** | https://console.deepgram.com/signup | $200 free credits |
-| **ElevenLabs** | https://elevenlabs.io/sign-up | ~2.5 hrs/month STT |
-| **Anthropic** | https://console.anthropic.com/ | Pay-as-you-go (credit-based) |
-
-Store in `.env`:
-```
-DEEPGRAM_API_KEY=your_key_here
-ELEVENLABS_API_KEY=your_key_here
-ANTHROPIC_API_KEY=your_key_here
-```
-
----
-
-## 9. Dependencies
-
-```
-streamlit>=1.40.0
-deepgram-sdk>=3.5.0
-elevenlabs>=1.0.0
-anthropic>=0.40.0
-python-dotenv>=1.0.0
-```
-
----
-
-## 10. Future Improvements (Out of Scope for v1)
+## 7. Future Improvements (Out of Scope for v1)
 
 | Feature | Description |
 |---------|-------------|
@@ -470,7 +340,7 @@ python-dotenv>=1.0.0
 
 ---
 
-## 11. Risk & Limitations
+## 8. Risk & Limitations
 
 - **Not for real clinical use.** This is a learning project with no HIPAA compliance, no audit trail, and no clinical validation.
 - **Diarization is imperfect.** All diarization systems can misattribute speakers, especially with overlapping speech, similar voices, or short utterances.

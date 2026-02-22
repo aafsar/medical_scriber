@@ -23,22 +23,7 @@
 
 ## Phase 0: Project Setup
 
-| Task | Status | Notes |
-|------|--------|-------|
-| Create project directory | DONE | `/medical_scriber/` |
-| Write project plan | DONE | `masterplan.md` |
-| Write progress tracker | DONE | `tracker_master.md` |
-| Initialize git repo | DONE | Python 3.14.3, private repo on GitHub |
-| Create Python virtual environment | DONE | `venv/` on 3.14.3 |
-| Create `requirements.txt` | DONE | 5 deps installed |
-| Create `.gitignore` | DONE | |
-| Create `.env` with placeholders | DONE | Gitignored |
-| Create `config.py` | DONE | 71 medical keyterms, model constants |
-| Create `sample_scripts/` | DONE | Empty placeholder for Phase 6 |
-| Obtain Deepgram API key | NOT STARTED | https://console.deepgram.com/signup |
-| Obtain ElevenLabs API key | NOT STARTED | https://elevenlabs.io/sign-up |
-| Obtain Anthropic API key | NOT STARTED | https://console.anthropic.com/ |
-| Verify all API keys work (ping test) | NOT STARTED | |
+**Status:** DONE (API keys pending). Details → [`_plans/phase0/tracker_phase0.md`](phase0/tracker_phase0.md)
 
 ---
 
@@ -46,6 +31,8 @@
 
 | Task | Status | Notes |
 |------|--------|-------|
+| Verify `st.audio_input()` output format | NOT STARTED | What format/encoding does Streamlit return? Does Deepgram accept it directly or need conversion? |
+| Verify Deepgram SDK v5 response structure | NOT STARTED | Check actual response object shape in `deepgram-sdk` 5.3.2 for utterance/diarization fields |
 | Create `app.py` with basic Streamlit layout | NOT STARTED | Title, description, audio widget |
 | Implement `st.audio_input()` recording | NOT STARTED | |
 | Add audio playback in UI | NOT STARTED | |
@@ -205,7 +192,7 @@
 
 | File | Purpose | Status |
 |------|---------|--------|
-| `PROJECT_PLAN.md` | Detailed project plan | DONE |
+| `_plans/masterplan.md` | Detailed project plan | DONE |
 | `tracker_master.md` | This progress tracker | DONE |
 | `app.py` | Main Streamlit app | NOT STARTED |
 | `transcriber.py` | Deepgram + ElevenLabs logic | NOT STARTED |
