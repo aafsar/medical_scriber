@@ -29,19 +29,6 @@ Tasks are listed in execution order. Dependencies noted where they exist.
 
 ---
 
-## Files to Create
-
-| File | Created | Committed |
-|------|---------|-----------|
-| `.python-version` | DONE | DONE (commit 1) |
-| `.gitignore` | DONE | DONE (commit 1) |
-| `requirements.txt` | DONE | DONE (commit 2) |
-| `.env` | DONE | N/A (gitignored) |
-| `config.py` | DONE | DONE (commit 2) |
-| `sample_scripts/` | DONE | DONE (commit 2) |
-
----
-
 ## API Keys
 
 | Service | Obtained | Added to `.env` | Verified |

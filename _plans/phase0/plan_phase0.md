@@ -1,6 +1,8 @@
 # Phase 0: Project Setup — Plan & Context
 
 > **Goal:** Set up the project foundation — git repo, Python environment, dependencies, config files, and API key placeholders — so that Phase 1 development can begin immediately.
+>
+> **Outcome:** Completed 2026-02-22. Python 3.14.3, all deps installed, private GitHub repo live. See `tracker_phase0.md` for status.
 
 ---
 
@@ -10,22 +12,15 @@
 - Master plan written (`_plans/masterplan.md`)
 - Master tracker written (`_plans/tracker_master.md`)
 - Phase subdirectories created (`_plans/phase0/` through `_plans/phase6/`)
-- Python available via pyenv (currently 3.13.1; will upgrade to 3.14.3)
+- Python available via pyenv
 
 ---
 
 ## Python Version
 
-**Target: Python 3.14.3** (latest stable release, Feb 2026).
+**Target: Python 3.14.3** (latest stable release, Feb 2026). Set via `pyenv local 3.14.3` which creates a `.python-version` file in the project root.
 
-The current pyenv installation only has up to 3.13.x. Before creating the virtual environment:
-1. Update pyenv itself: `pyenv update` (or `brew upgrade pyenv` on macOS)
-2. Install Python 3.14.3: `pyenv install 3.14.3`
-3. Set it as the project-local version: `pyenv local 3.14.3`
-
-This creates a `.python-version` file in the project root that pyenv uses automatically.
-
-**Fallback:** If any dependency fails to install on 3.14, fall back to 3.13.4 (latest stable 3.13.x in pyenv). Python 3.14 is new and some packages may not have wheels yet.
+**Fallback:** 3.13.4 if dependencies don't support 3.14 yet (not needed — all 5 deps have 3.14 wheels).
 
 ---
 
@@ -52,16 +47,7 @@ Must be created before `git init` so the initial commit is clean.
 
 ## `.env` Design
 
-Placeholder file for API keys. Not committed to git.
-
-```
-# AI Medical Scriber - API Keys
-# Replace placeholder values with your actual API keys
-
-DEEPGRAM_API_KEY=your_deepgram_key_here
-ELEVENLABS_API_KEY=your_elevenlabs_key_here
-ANTHROPIC_API_KEY=your_anthropic_key_here
-```
+Placeholder file for API keys. Not committed to git (gitignored). Contains `DEEPGRAM_API_KEY`, `ELEVENLABS_API_KEY`, `ANTHROPIC_API_KEY`.
 
 **Where to get keys:**
 - Deepgram: https://console.deepgram.com/signup ($200 free credits)
@@ -72,85 +58,18 @@ ANTHROPIC_API_KEY=your_anthropic_key_here
 
 ## `requirements.txt` Contents
 
-From masterplan Section 9:
-
-```
-streamlit>=1.40.0
-deepgram-sdk>=3.5.0
-elevenlabs>=1.0.0
-anthropic>=0.40.0
-python-dotenv>=1.0.0
-```
-
-5 packages. All are top-level dependencies; pip handles transitive deps.
+5 top-level dependencies from masterplan Section 9: `streamlit`, `deepgram-sdk`, `elevenlabs`, `anthropic`, `python-dotenv`. See `requirements.txt` for pinned versions.
 
 ---
 
 ## `config.py` Design
 
-Centralized configuration module. Loads API keys from `.env` via `python-dotenv`, defines model constants and medical keyterms.
+Centralized configuration module. See `config.py` for full implementation.
 
 **Structure:**
-- **API Keys** — loaded from environment variables via `os.getenv()`
+- **API Keys** — loaded from `.env` via `python-dotenv` / `os.getenv()`
 - **Model constants** — `DEEPGRAM_MODEL`, `ELEVENLABS_MODEL`, `CLAUDE_MODEL` — defined here so they can be changed in one place
-- **Medical keyterms** — list of ~55 medical terms for ElevenLabs' `keyterms` parameter (up to 100 allowed). Covers:
-  - Common conditions (hypertension, diabetes, COPD, etc.)
-  - Common medications (metformin, lisinopril, etc.)
-  - Orthopedic terms (meniscus, McMurray, Lachman, etc.)
-  - Cardiology terms (echocardiogram, troponin, etc.)
-  - General medical terms (bilateral, palpation, etc.)
-  - Vitals/measurements (systolic, SpO2, HbA1c, etc.)
-  - Procedures (MRI, arthroscopy, etc.)
-
-```python
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
-# API Keys
-DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY")
-ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
-
-# Model configuration
-DEEPGRAM_MODEL = "nova-2-medical"
-ELEVENLABS_MODEL = "scribe_v2"
-CLAUDE_MODEL = "claude-sonnet-4-20250514"
-
-# Medical keyterms for ElevenLabs (up to 100)
-MEDICAL_KEYTERMS = [
-    # Common conditions
-    "hypertension", "diabetes mellitus", "osteoarthritis",
-    "hyperlipidemia", "COPD", "atrial fibrillation",
-    "coronary artery disease", "congestive heart failure",
-    "gastroesophageal reflux", "hypothyroidism",
-    # Common medications
-    "metformin", "lisinopril", "atorvastatin",
-    "amlodipine", "omeprazole", "levothyroxine",
-    "metoprolol", "losartan", "gabapentin", "prednisone",
-    "ibuprofen", "acetaminophen", "naproxen", "diclofenac",
-    # Orthopedic terms
-    "meniscus", "ligament", "ACL", "MCL",
-    "rotator cuff", "sciatica", "stenosis",
-    "osteophyte", "effusion", "crepitus",
-    "McMurray", "Lachman", "antalgic",
-    # Cardiology terms
-    "echocardiogram", "ejection fraction", "troponin",
-    "electrocardiogram", "stent", "angioplasty",
-    "palpitations", "dyspnea", "syncope", "murmur",
-    # General medical terms
-    "bilateral", "contralateral", "ipsilateral",
-    "proximal", "distal", "anterior", "posterior",
-    "palpation", "auscultation", "percussion",
-    # Vitals & measurements
-    "systolic", "diastolic", "SpO2", "BMI",
-    "hemoglobin A1c", "creatinine", "BUN",
-    # Procedures
-    "MRI", "CT scan", "X-ray", "ultrasound",
-    "arthroscopy", "injection", "biopsy",
-]
-```
+- **Medical keyterms** — 71 terms for ElevenLabs' `keyterms` parameter (up to 100 allowed). Covers conditions, medications, orthopedic/cardiology terms, vitals, and procedures
 
 ---
 
@@ -179,15 +98,3 @@ Two commits for Phase 0:
 
 `.env` is never committed.
 
----
-
-## Done Criteria
-
-Phase 0 is complete when:
-- Git repo initialized with clean commit history
-- Python 3.14.3 venv created and activatable (or 3.13.4 fallback)
-- All 5 dependencies installed and importable
-- `.env` exists with placeholder keys
-- `config.py` loads keys and defines all constants + keyterms
-- `sample_scripts/` directory exists
-- API keys obtained and verified (manual — user action, can be deferred)
