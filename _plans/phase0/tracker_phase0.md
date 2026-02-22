@@ -1,7 +1,7 @@
 # Phase 0: Project Setup — Tracker
 
-> **Last Updated:** 2026-02-21
-> **Phase Status:** NOT STARTED
+> **Last Updated:** 2026-02-22
+> **Phase Status:** DONE (API keys pending)
 
 ---
 
@@ -11,17 +11,17 @@ Tasks are listed in execution order. Dependencies noted where they exist.
 
 | # | Task | Status | Depends On | Notes |
 |---|------|--------|------------|-------|
-| 0.1 | Update pyenv + install Python 3.14.3 | NOT STARTED | — | `pyenv update && pyenv install 3.14.3` |
-| 0.2 | Set project Python version | NOT STARTED | 0.1 | `pyenv local 3.14.3` (creates `.python-version`) |
-| 0.3 | Create `.gitignore` | NOT STARTED | — | See plan for full contents |
-| 0.4 | Initialize git repo + initial commit | NOT STARTED | 0.2, 0.3 | Commits: `.gitignore`, `_plans/`, `.claude/`, `.python-version` |
-| 0.5 | Create Python virtual environment | NOT STARTED | 0.2 | `python3 -m venv venv` |
-| 0.6 | Create `requirements.txt` | NOT STARTED | — | 5 dependencies from masterplan |
-| 0.7 | Install dependencies | NOT STARTED | 0.5, 0.6 | `pip install -r requirements.txt` |
-| 0.8 | Create `.env` with placeholder keys | NOT STARTED | — | Not committed to git |
-| 0.9 | Create `config.py` | NOT STARTED | 0.8 | Loads keys, defines model constants + keyterms |
-| 0.10 | Create `sample_scripts/` directory | NOT STARTED | — | Empty placeholder for Phase 6 |
-| 0.11 | Commit Phase 0 files | NOT STARTED | 0.6–0.10 | `requirements.txt`, `config.py`, `sample_scripts/` |
+| 0.1 | Update pyenv + install Python 3.14.3 | DONE | — | pyenv 2.6.1→2.6.23, Python 3.14.3 installed |
+| 0.2 | Set project Python version | DONE | 0.1 | `pyenv local 3.14.3` → `.python-version` created |
+| 0.3 | Create `.gitignore` | DONE | — | All planned entries included |
+| 0.4 | Initialize git repo + initial commit | DONE | 0.2, 0.3 | Commit `1c4baeb` |
+| 0.5 | Create Python virtual environment | DONE | 0.2 | `python3 -m venv venv` on 3.14.3 |
+| 0.6 | Create `requirements.txt` | DONE | — | 5 dependencies |
+| 0.7 | Install dependencies | DONE | 0.5, 0.6 | All installed on 3.14.3, no fallback needed |
+| 0.8 | Create `.env` with placeholder keys | DONE | — | Not committed (gitignored) |
+| 0.9 | Create `config.py` | DONE | 0.8 | 71 keyterms (plan said ~55, expanded) |
+| 0.10 | Create `sample_scripts/` directory | DONE | — | `.gitkeep` added for git tracking |
+| 0.11 | Commit Phase 0 files | DONE | 0.6–0.10 | Commit `5713057` |
 | 0.12 | Obtain API keys (manual) | NOT STARTED | — | Deepgram, ElevenLabs, Anthropic |
 | 0.13 | Verify API keys work (manual) | NOT STARTED | 0.7, 0.8, 0.12 | Smoke test each provider |
 
@@ -33,12 +33,12 @@ Tasks are listed in execution order. Dependencies noted where they exist.
 
 | File | Created | Committed |
 |------|---------|-----------|
-| `.python-version` | NOT STARTED | NOT STARTED |
-| `.gitignore` | NOT STARTED | NOT STARTED |
-| `requirements.txt` | NOT STARTED | NOT STARTED |
-| `.env` | NOT STARTED | N/A (gitignored) |
-| `config.py` | NOT STARTED | NOT STARTED |
-| `sample_scripts/` | NOT STARTED | NOT STARTED |
+| `.python-version` | DONE | DONE (commit 1) |
+| `.gitignore` | DONE | DONE (commit 1) |
+| `requirements.txt` | DONE | DONE (commit 2) |
+| `.env` | DONE | N/A (gitignored) |
+| `config.py` | DONE | DONE (commit 2) |
+| `sample_scripts/` | DONE | DONE (commit 2) |
 
 ---
 
@@ -56,14 +56,33 @@ Tasks are listed in execution order. Dependencies noted where they exist.
 
 Run after all tasks are done:
 
-- [ ] `python3 --version` → 3.14.3
-- [ ] `git log --oneline` → shows 2 commits
-- [ ] `source venv/bin/activate` → no errors
-- [ ] `pip list` → shows streamlit, deepgram-sdk, elevenlabs, anthropic, python-dotenv
-- [ ] `.env` exists but `git status` does not show it
-- [ ] `python -c "import config; print(config.CLAUDE_MODEL)"` → `claude-sonnet-4-20250514`
-- [ ] `python -c "import config; print(len(config.MEDICAL_KEYTERMS))"` → ~55
-- [ ] `ls sample_scripts/` → directory exists
+- [x] `python3 --version` → 3.14.3
+- [x] `git log --oneline` → shows 2 commits
+- [x] `source venv/bin/activate` → no errors
+- [x] `pip list` → shows streamlit, deepgram-sdk, elevenlabs, anthropic, python-dotenv
+- [x] `.env` exists but `git status` does not show it
+- [x] `python -c "import config; print(config.CLAUDE_MODEL)"` → `claude-sonnet-4-20250514`
+- [x] `python -c "import config; print(len(config.MEDICAL_KEYTERMS))"` → 71
+- [x] `ls sample_scripts/` → directory exists
+
+---
+
+## Installed Versions
+
+| Package | Version |
+|---------|---------|
+| streamlit | 1.54.0 |
+| deepgram-sdk | 5.3.2 |
+| elevenlabs | 2.36.1 |
+| anthropic | 0.83.0 |
+| python-dotenv | 1.2.1 |
+
+---
+
+## GitHub
+
+- **Repo:** https://github.com/aafsar/medical_scriber (private)
+- **Pushed:** 2 commits on `main`
 
 ---
 
@@ -71,7 +90,7 @@ Run after all tasks are done:
 
 | # | Date | Issue | Resolution |
 |---|------|-------|------------|
-| | | | |
+| 1 | 2026-02-22 | pyenv 2.6.1 didn't have 3.14.3 | Upgraded pyenv to 2.6.23 via `brew upgrade pyenv` |
 
 ---
 

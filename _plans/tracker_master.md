@@ -1,7 +1,7 @@
 # AI Medical Scriber - Master Progress Tracker
 
-> **Last Updated:** 2026-02-21
-> **Status:** Planning Complete, Ready to Build
+> **Last Updated:** 2026-02-22
+> **Status:** Phase 0 Done (API keys pending), Ready for Phase 1
 
 ---
 
@@ -9,7 +9,7 @@
 
 | Phase | Status | Notes |
 |-------|--------|-------|
-| Phase 0: Project Setup | NOT STARTED | |
+| Phase 0: Project Setup | DONE | API keys pending (manual) |
 | Phase 1: Audio + Deepgram Transcription | NOT STARTED | |
 | Phase 2: ElevenLabs Transcription | NOT STARTED | |
 | Phase 3: Speaker Role Mapping | NOT STARTED | |
@@ -26,13 +26,15 @@
 | Task | Status | Notes |
 |------|--------|-------|
 | Create project directory | DONE | `/medical_scriber/` |
-| Write project plan | DONE | `PROJECT_PLAN.md` |
+| Write project plan | DONE | `masterplan.md` |
 | Write progress tracker | DONE | `tracker_master.md` |
-| Initialize git repo | NOT STARTED | |
-| Create Python virtual environment | NOT STARTED | |
-| Create `requirements.txt` | NOT STARTED | |
-| Create `.gitignore` | NOT STARTED | |
-| Create `.env` with placeholders | NOT STARTED | |
+| Initialize git repo | DONE | Python 3.14.3, private repo on GitHub |
+| Create Python virtual environment | DONE | `venv/` on 3.14.3 |
+| Create `requirements.txt` | DONE | 5 deps installed |
+| Create `.gitignore` | DONE | |
+| Create `.env` with placeholders | DONE | Gitignored |
+| Create `config.py` | DONE | 71 medical keyterms, model constants |
+| Create `sample_scripts/` | DONE | Empty placeholder for Phase 6 |
 | Obtain Deepgram API key | NOT STARTED | https://console.deepgram.com/signup |
 | Obtain ElevenLabs API key | NOT STARTED | https://elevenlabs.io/sign-up |
 | Obtain Anthropic API key | NOT STARTED | https://console.anthropic.com/ |
@@ -194,6 +196,8 @@
 | 3 | 2026-02-21 | Use Claude API for note generation | Best structured extraction, strong guardrails against hallucination |
 | 4 | 2026-02-21 | Hybrid SOAP/H&P note format | Covers CMS essentials, mirrors real specialist EHR output |
 | 5 | 2026-02-21 | No database for v1 | Download notes as files; simplicity over persistence |
+| 6 | 2026-02-22 | Python 3.14.3 (no fallback needed) | Latest stable, all 5 deps have 3.14 wheels |
+| 7 | 2026-02-22 | Private GitHub repo | `aafsar/medical_scriber` |
 
 ---
 
@@ -206,9 +210,9 @@
 | `app.py` | Main Streamlit app | NOT STARTED |
 | `transcriber.py` | Deepgram + ElevenLabs logic | NOT STARTED |
 | `note_generator.py` | Claude API note generation | NOT STARTED |
-| `config.py` | Shared config, medical keyterms | NOT STARTED |
-| `requirements.txt` | Python dependencies | NOT STARTED |
-| `.env` | API keys | NOT STARTED |
-| `.gitignore` | Git ignore rules | NOT STARTED |
+| `config.py` | Shared config, medical keyterms | DONE |
+| `requirements.txt` | Python dependencies | DONE |
+| `.env` | API keys (placeholder) | DONE |
+| `.gitignore` | Git ignore rules | DONE |
 | `sample_scripts/ortho_knee_pain.md` | Test script | NOT STARTED |
 | `sample_scripts/cardio_chest_pain.md` | Test script | NOT STARTED |
