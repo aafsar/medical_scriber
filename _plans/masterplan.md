@@ -46,7 +46,28 @@ We will implement **both** providers and compare quality on the same recordings.
 - Latency (time to get results back)
 - Ease of integration
 
-### 2.2 LLM for Note Generation
+### 2.2 Provider Evaluation Backlog
+
+Beyond Deepgram and ElevenLabs (implemented in Phases 1–2), evaluate these providers for transcription and/or diarization quality on medical audio. Prioritize based on medical-specific features, free tier availability, and diarization support.
+
+| Provider | Category | Notes |
+|----------|----------|-------|
+| **AssemblyAI** | Transcription + diarization | Universal-2 model, medical vocab, speaker labels |
+| **OpenAI** | Transcription | Whisper API; no native diarization |
+| **Google** | Transcription + diarization | Cloud Speech-to-Text; medical adaptation available |
+| **AWS** | Transcription + diarization | Amazon Transcribe Medical; HIPAA-eligible |
+| **Azure** | Transcription + diarization | Azure AI Speech; custom medical models |
+| **Speechmatics** | Transcription + diarization | High accuracy claims; real-time and batch |
+| **Cartesia** | Voice / TTS-focused | Evaluate if transcription API exists |
+| **Livekit** | Real-time infra | WebRTC platform; may integrate with STT providers |
+| **Pipecat** | Voice pipeline framework | Orchestration layer, not a provider itself |
+| **Retell** | Voice agent platform | Built for conversational AI; evaluate STT component |
+| **Rime** | TTS-focused | Evaluate if transcription API exists |
+| **Vapi** | Voice agent platform | Orchestration layer; evaluate STT component |
+
+**When to evaluate:** After Phase 6 baseline comparison (Deepgram vs ElevenLabs) is complete. Use the same test recordings and comparison framework to benchmark new providers.
+
+### 2.3 LLM for Note Generation
 
 **Claude API** via the `anthropic` Python SDK.
 

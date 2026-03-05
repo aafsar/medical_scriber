@@ -1,7 +1,7 @@
 # AI Medical Scriber - Master Progress Tracker
 
-> **Last Updated:** 2026-02-22
-> **Status:** Phase 1 Done (e2e test pending real API key), Ready for Phase 2
+> **Last Updated:** 2026-03-05
+> **Status:** Phases 0–3 code-complete (e2e tests pending real API keys), Phase 4 designed, ready to implement
 
 ---
 
@@ -10,12 +10,12 @@
 | Phase | Status | Notes |
 |-------|--------|-------|
 | Phase 0: Project Setup | DONE | API keys pending (manual) |
-| Phase 1: Audio + Deepgram Transcription | DONE | e2e test pending real API key |
-| Phase 2: ElevenLabs Transcription | NOT STARTED | |
-| Phase 3: Speaker Role Mapping | NOT STARTED | |
-| Phase 4: Note Generation (Claude) | NOT STARTED | |
-| Phase 5: Patient Info + Polish | NOT STARTED | |
-| Phase 6: End-to-End Testing | NOT STARTED | |
+| Phase 1: Audio + Deepgram Transcription | DONE | Code complete, e2e test pending real API key |
+| Phase 2: ElevenLabs Transcription | DONE | Code complete, e2e test pending real API key |
+| Phase 3: Speaker Role Mapping | DONE | Code complete, UI smoke tests pending |
+| Phase 4: Note Generation (Claude) | NOT STARTED | Plan + tracker docs ready |
+| Phase 5: Patient Info + Polish | NOT STARTED | No plan/tracker docs yet |
+| Phase 6: End-to-End Testing | NOT STARTED | No plan/tracker docs yet |
 
 **Status legend:** NOT STARTED | IN PROGRESS | DONE | BLOCKED
 
@@ -35,48 +35,19 @@
 
 ## Phase 2: ElevenLabs Transcription
 
-| Task | Status | Notes |
-|------|--------|-------|
-| Implement `transcribe_elevenlabs()` function | NOT STARTED | `scribe_v2`, `diarize=True` |
-| Create medical `keyterms` list in `config.py` | NOT STARTED | Up to 100 terms |
-| Reconstruct utterances from word-level speaker_id | NOT STARTED | ElevenLabs returns word-level, not utterance-level |
-| Add provider toggle in UI (radio/selectbox) | NOT STARTED | `[Deepgram] / [ElevenLabs]` |
-| Test with same audio on both providers | NOT STARTED | |
-| Compare: medical term accuracy | NOT STARTED | |
-| Compare: diarization accuracy | NOT STARTED | |
-| Compare: latency | NOT STARTED | |
-
-**Blockers:** Requires ElevenLabs API key from Phase 0.
+**Status:** DONE (code complete, e2e test pending real API key). Details → [`_plans/phase2/tracker_phase2.md`](phase2/tracker_phase2.md)
 
 ---
 
 ## Phase 3: Speaker Role Mapping
 
-| Task | Status | Notes |
-|------|--------|-------|
-| Add speaker assignment UI (radio buttons) | NOT STARTED | "Speaker 0 is: Doctor / Patient" |
-| Default first speaker = Doctor | NOT STARTED | |
-| Re-label transcript with Doctor/Patient tags | NOT STARTED | |
-| Format transcript for LLM input | NOT STARTED | `Doctor: "..."` / `Patient: "..."` |
-
-**Blockers:** Requires Phase 1 or 2 working.
+**Status:** DONE (code complete, UI smoke tests pending). Details → [`_plans/phase3/tracker_phase3.md`](phase3/tracker_phase3.md)
 
 ---
 
 ## Phase 4: Note Generation with Claude
 
-| Task | Status | Notes |
-|------|--------|-------|
-| Create `note_generator.py` | NOT STARTED | |
-| Write system prompt with note template | NOT STARTED | Consultation note format from plan Section 3.1 |
-| Add guardrails to prompt | NOT STARTED | No hallucination, mark "Not discussed" sections |
-| Request JSON output matching template schema | NOT STARTED | |
-| Implement `generate_notes()` function | NOT STARTED | Input: transcript + patient_info, Output: dict |
-| Parse JSON response + handle edge cases | NOT STARTED | Missing sections, malformed output |
-| Display formatted notes in UI | NOT STARTED | Expandable sections, dimmed "Not discussed" |
-| Test with sample transcript | NOT STARTED | |
-
-**Blockers:** Requires Phase 3 (labeled transcript) and Anthropic API key.
+**Status:** NOT STARTED (plan + tracker docs ready). Details → [`_plans/phase4/tracker_phase4.md`](phase4/tracker_phase4.md)
 
 ---
 
@@ -172,6 +143,7 @@
 | 5 | 2026-02-21 | No database for v1 | Download notes as files; simplicity over persistence |
 | 6 | 2026-02-22 | Python 3.14.3 (no fallback needed) | Latest stable, all 5 deps have 3.14 wheels |
 | 7 | 2026-02-22 | Private GitHub repo | `aafsar/medical_scriber` |
+| 8 | 2026-02-22 | Expand provider evaluation backlog | 12 additional providers shortlisted (AssemblyAI, AWS, Azure, Cartesia, Google, Livekit, OpenAI, Pipecat, Retell, Rime, Speechmatics, Vapi). Evaluate after Phase 6 baseline using same test recordings. See masterplan Section 2.2 |
 
 ---
 
@@ -180,15 +152,20 @@
 | File | Purpose | Status |
 |------|---------|--------|
 | `_plans/masterplan.md` | Detailed project plan | DONE |
-| `tracker_master.md` | This progress tracker | DONE |
-| `app.py` | Main Streamlit app | DONE (Phase 1) |
-| `transcriber.py` | Deepgram + ElevenLabs logic | DONE (Deepgram) |
-| `note_generator.py` | Claude API note generation | NOT STARTED |
-| `_plans/phase1/plan_phase1.md` | Phase 1 design doc | DONE |
-| `_plans/phase1/tracker_phase1.md` | Phase 1 task tracker | DONE |
+| `_plans/tracker_master.md` | This progress tracker | DONE |
+| `app.py` | Main Streamlit app | DONE (Phase 3) |
+| `transcriber.py` | Deepgram + ElevenLabs transcription | DONE (Phase 3) |
+| `note_generator.py` | Claude API note generation | NOT STARTED (Phase 4) |
 | `config.py` | Shared config, medical keyterms | DONE |
 | `requirements.txt` | Python dependencies | DONE |
 | `.env` | API keys (placeholder) | DONE |
 | `.gitignore` | Git ignore rules | DONE |
+| `_plans/phase0/` | Phase 0 plan + tracker | DONE |
+| `_plans/phase1/` | Phase 1 plan + tracker | DONE |
+| `_plans/phase2/` | Phase 2 plan + tracker | DONE |
+| `_plans/phase3/` | Phase 3 plan + tracker | DONE |
+| `_plans/phase4/` | Phase 4 plan + tracker | DONE (uncommitted) |
+| `_plans/phase5/` | Phase 5 plan + tracker | NOT STARTED |
+| `_plans/phase6/` | Phase 6 plan + tracker | NOT STARTED |
 | `sample_scripts/ortho_knee_pain.md` | Test script | NOT STARTED |
 | `sample_scripts/cardio_chest_pain.md` | Test script | NOT STARTED |

@@ -1,7 +1,7 @@
 # Phase 3: Speaker Role Mapping — Tracker
 
-> **Last Updated:** 2026-02-22
-> **Phase Status:** IN PROGRESS
+> **Last Updated:** 2026-03-05
+> **Phase Status:** DONE (code complete, UI smoke tests pending)
 
 ---
 

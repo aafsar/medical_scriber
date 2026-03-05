@@ -1,7 +1,7 @@
 # Phase 3: Speaker Role Mapping — Plan & Context
 
 > **Goal:** Map numeric speaker IDs (Speaker 0/1) to semantic roles (Doctor/Patient) for transcript display and LLM input formatting.
-> **Outcome:** [filled after completion]
+> **Outcome:** Speaker role mapping implemented. Radio widget for Doctor/Patient assignment, `format_transcript_for_llm()` function, role-labeled transcript display and LLM-ready output in session state.
 
 ---
 
