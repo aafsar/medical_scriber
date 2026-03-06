@@ -1,7 +1,7 @@
 # AI Medical Scriber - Master Progress Tracker
 
 > **Last Updated:** 2026-03-05
-> **Status:** Phases 0–3 code-complete (e2e tests pending real API keys), Phase 4 designed, ready to implement
+> **Status:** Phases 0–4 code-complete (e2e tests pending real API keys), ready for Phase 5
 
 ---
 
@@ -13,7 +13,7 @@
 | Phase 1: Audio + Deepgram Transcription | DONE | Code complete, e2e test pending real API key |
 | Phase 2: ElevenLabs Transcription | DONE | Code complete, e2e test pending real API key |
 | Phase 3: Speaker Role Mapping | DONE | Code complete, UI smoke tests pending |
-| Phase 4: Note Generation (Claude) | NOT STARTED | Plan + tracker docs ready |
+| Phase 4: Note Generation (Claude) | DONE | Code complete, e2e test pending real API key |
 | Phase 5: Patient Info + Polish | NOT STARTED | No plan/tracker docs yet |
 | Phase 6: End-to-End Testing | NOT STARTED | No plan/tracker docs yet |
 
@@ -47,7 +47,7 @@
 
 ## Phase 4: Note Generation with Claude
 
-**Status:** NOT STARTED (plan + tracker docs ready). Details → [`_plans/phase4/tracker_phase4.md`](phase4/tracker_phase4.md)
+**Status:** DONE (code complete, e2e test pending real API key). Details → [`_plans/phase4/tracker_phase4.md`](phase4/tracker_phase4.md)
 
 ---
 
@@ -155,7 +155,7 @@
 | `_plans/tracker_master.md` | This progress tracker | DONE |
 | `app.py` | Main Streamlit app | DONE (Phase 3) |
 | `transcriber.py` | Deepgram + ElevenLabs transcription | DONE (Phase 3) |
-| `note_generator.py` | Claude API note generation | NOT STARTED (Phase 4) |
+| `note_generator.py` | Claude API note generation | DONE (Phase 4) |
 | `config.py` | Shared config, medical keyterms | DONE |
 | `requirements.txt` | Python dependencies | DONE |
 | `.env` | API keys (placeholder) | DONE |
@@ -164,7 +164,7 @@
 | `_plans/phase1/` | Phase 1 plan + tracker | DONE |
 | `_plans/phase2/` | Phase 2 plan + tracker | DONE |
 | `_plans/phase3/` | Phase 3 plan + tracker | DONE |
-| `_plans/phase4/` | Phase 4 plan + tracker | DONE (uncommitted) |
+| `_plans/phase4/` | Phase 4 plan + tracker | DONE |
 | `_plans/phase5/` | Phase 5 plan + tracker | NOT STARTED |
 | `_plans/phase6/` | Phase 6 plan + tracker | NOT STARTED |
 | `sample_scripts/ortho_knee_pain.md` | Test script | NOT STARTED |

@@ -1,7 +1,7 @@
 # Phase 4: Claude-Powered Consultation Note Generation — Plan & Context
 
 > **Goal:** Generate structured consultation notes from the diarized, role-labeled transcript using the Claude API.
-> **Outcome:** [filled after completion]
+> **Outcome:** Note generation implemented. `note_generator.py` with system prompt, flat-string JSON schema, extract-only guardrails, sentinel values. UI wired with Generate Notes button and expandable section display.
 
 ---
 
