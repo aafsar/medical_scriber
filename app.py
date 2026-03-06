@@ -1,14 +1,35 @@
 import time
+from datetime import date
 
 import streamlit as st
 
-from config import ANTHROPIC_API_KEY, DEEPGRAM_API_KEY, ELEVENLABS_API_KEY
-from note_generator import NOTE_SECTIONS, PATIENT_INFO_FIELDS, generate_notes
+from config import ANTHROPIC_API_KEY, DEEPGRAM_API_KEY, ELEVENLABS_API_KEY, SPECIALTIES
+from note_generator import NOTE_SECTIONS, PATIENT_INFO_FIELDS, build_download_markdown, generate_notes
 from transcriber import transcribe_deepgram, transcribe_elevenlabs, format_transcript_for_llm
 
 st.set_page_config(page_title="AI Medical Scriber", layout="wide")
 
 st.title("AI Medical Scriber")
+
+# --- Sidebar: patient info form ---
+with st.sidebar:
+    with st.form("patient_info_form"):
+        st.subheader("Patient Information")
+        patient_name = st.text_input("Patient Name")
+        dob = st.date_input("Date of Birth", value=None)
+        dos = st.date_input("Date of Service", value=date.today())
+        referring = st.text_input("Referring Physician")
+        specialty = st.selectbox("Specialty", SPECIALTIES)
+        submitted = st.form_submit_button("Save Patient Info")
+        if submitted:
+            st.session_state.patient_info = {
+                "name": patient_name or "",
+                "date_of_birth": dob.strftime("%m/%d/%Y") if dob else "",
+                "date_of_service": dos.strftime("%m/%d/%Y") if dos else "",
+                "referring_physician": referring or "",
+                "specialty": specialty or "",
+            }
+            st.success("Patient info saved.")
 
 # --- API key warnings ---
 provider = st.radio("Transcription Provider", ["Deepgram", "ElevenLabs"])
@@ -33,14 +54,19 @@ if audio:
                 audio_bytes = audio.getvalue()
                 t0 = time.time()
                 if provider == "ElevenLabs":
-                    st.session_state.transcript = transcribe_elevenlabs(audio_bytes)
+                    result = transcribe_elevenlabs(audio_bytes)
                 else:
-                    st.session_state.transcript = transcribe_deepgram(audio_bytes)
+                    result = transcribe_deepgram(audio_bytes)
                 elapsed = time.time() - t0
-                st.session_state.latency_msg = f"Transcribed in {elapsed:.1f}s via {provider}"
-                # Clear previous notes when re-transcribing
-                st.session_state.pop("notes", None)
-                st.session_state.pop("notes_latency_msg", None)
+
+                if not result:
+                    st.warning("No speech detected. Try recording again with a longer or louder consultation.")
+                else:
+                    st.session_state.transcript = result
+                    st.session_state.latency_msg = f"Transcribed in {elapsed:.1f}s via {provider}"
+                    # Clear previous notes when re-transcribing
+                    st.session_state.pop("notes", None)
+                    st.session_state.pop("notes_latency_msg", None)
             except (ValueError, RuntimeError) as e:
                 st.error(str(e))
 
@@ -68,7 +94,10 @@ if st.session_state.get("transcript"):
         with st.spinner("Generating consultation notes..."):
             try:
                 t0 = time.time()
-                st.session_state.notes = generate_notes(st.session_state.llm_transcript)
+                st.session_state.notes = generate_notes(
+                    st.session_state.llm_transcript,
+                    patient_info=st.session_state.get("patient_info"),
+                )
                 elapsed = time.time() - t0
                 st.session_state.notes_latency_msg = f"Notes generated in {elapsed:.1f}s"
             except (ValueError, RuntimeError) as e:
@@ -102,3 +131,20 @@ if st.session_state.get("notes"):
                     st.markdown(value)
                 else:
                     st.markdown(f":gray[{value}]")
+
+    # --- Download button ---
+    md_content = build_download_markdown(notes)
+    patient_info = st.session_state.get("patient_info", {})
+    name = patient_info.get("name", "").strip()
+    dos = patient_info.get("date_of_service", "")
+    if name:
+        name_slug = name.lower().replace(" ", "_")
+        file_name = f"{name_slug}_{dos}_consultation.md" if dos else f"{name_slug}_consultation.md"
+    else:
+        file_name = "consultation_notes.md"
+    st.download_button(
+        "Download Notes (Markdown)",
+        data=md_content,
+        file_name=file_name,
+        mime="text/markdown",
+    )

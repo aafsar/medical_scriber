@@ -45,3 +45,22 @@ MEDICAL_KEYTERMS = [
     "MRI", "CT scan", "X-ray", "ultrasound",
     "arthroscopy", "injection", "biopsy",
 ]
+
+SPECIALTIES = (
+    "Cardiology",
+    "Dermatology",
+    "Endocrinology",
+    "Gastroenterology",
+    "Hematology / Oncology",
+    "Infectious Disease",
+    "Internal Medicine",
+    "Nephrology",
+    "Neurology",
+    "Obstetrics & Gynecology",
+    "Ophthalmology",
+    "Orthopedic Surgery",
+    "Otolaryngology (ENT)",
+    "Pulmonology",
+    "Rheumatology",
+    "Urology",
+)

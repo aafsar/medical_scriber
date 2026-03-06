@@ -147,6 +147,25 @@ def _parse_response(text: str) -> dict:
     raise RuntimeError(f"Failed to parse Claude response as JSON: {text[:200]}")
 
 
+def build_download_markdown(notes: dict) -> str:
+    """Serialize a consultation note dict into a readable Markdown string."""
+    lines = ["CONSULTATION NOTE", "=================", ""]
+    for key, label in NOTE_SECTIONS:
+        value = notes.get(key, "Not discussed")
+        heading = label.upper()
+        if key == "patient_information":
+            lines.append(heading)
+            info = value if isinstance(value, dict) else {}
+            for field_key, field_label in PATIENT_INFO_FIELDS:
+                field_val = info.get(field_key, "Not provided")
+                lines.append(f"  {field_label}: {field_val}")
+        else:
+            lines.append(heading)
+            lines.append(value)
+        lines.append("")
+    return "\n".join(lines)
+
+
 def _validate_note(note: dict) -> dict:
     for key, _ in NOTE_SECTIONS:
         if key == "patient_information":
