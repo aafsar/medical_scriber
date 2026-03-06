@@ -1,7 +1,7 @@
 # AI Medical Scriber - Master Progress Tracker
 
-> **Last Updated:** 2026-03-05
-> **Status:** Phases 0–4 code-complete (e2e tests pending real API keys), ready for Phase 5
+> **Last Updated:** 2026-03-06
+> **Status:** Phases 0–5 code-complete (e2e tests pending real API keys), ready for Phase 6
 
 ---
 
@@ -14,8 +14,8 @@
 | Phase 2: ElevenLabs Transcription | DONE | Code complete, e2e test pending real API key |
 | Phase 3: Speaker Role Mapping | DONE | Code complete, UI smoke tests pending |
 | Phase 4: Note Generation (Claude) | DONE | Code complete, e2e test pending real API key |
-| Phase 5: Patient Info + Polish | NOT STARTED | No plan/tracker docs yet |
-| Phase 6: End-to-End Testing | NOT STARTED | No plan/tracker docs yet |
+| Phase 5: Patient Info + Polish | DONE | Sidebar form, download button, empty transcript guard |
+| Phase 6: End-to-End Testing | IN PROGRESS | Scripts written, recording + testing pending |
 
 **Status legend:** NOT STARTED | IN PROGRESS | DONE | BLOCKED
 
@@ -53,39 +53,22 @@
 
 ## Phase 5: Patient Info + Polish
 
+**Status:** DONE. Implemented 2026-03-06, no separate plan/tracker docs (small phase).
+
 | Task | Status | Notes |
 |------|--------|-------|
-| Add sidebar form for patient metadata | NOT STARTED | Name, DOB, Date of Service, Specialty |
-| Add Referring Physician field (optional) | NOT STARTED | |
-| Add Specialty dropdown | NOT STARTED | Ortho, Cardio, Neuro, GI, Derm, etc. |
-| Merge patient info into note header | NOT STARTED | |
-| Add "Download Notes" button (Markdown) | NOT STARTED | |
-| Error handling: no audio recorded | NOT STARTED | |
-| Error handling: API failures | NOT STARTED | Timeout, auth errors |
-| Error handling: empty/short recordings | NOT STARTED | |
-| Add processing spinners + status messages | NOT STARTED | |
-
-**Blockers:** Requires Phase 4 working.
+| Add sidebar form for patient metadata | DONE | Name, DOB, Date of Service, Referring Physician, Specialty |
+| Add Specialty dropdown | DONE | 16 specialties in `config.py` `SPECIALTIES` tuple |
+| Pass patient_info to generate_notes | DONE | Claude echoes patient details into note |
+| Add "Download Notes" button (Markdown) | DONE | `build_download_markdown()` in `note_generator.py` |
+| Error handling: empty/short recordings | DONE | Empty transcript guard with warning message |
+| Processing spinners + status messages | DONE | Already existed from prior phases |
 
 ---
 
 ## Phase 6: End-to-End Testing
 
-| Task | Status | Notes |
-|------|--------|-------|
-| Write ortho consultation script | NOT STARTED | Knee pain scenario |
-| Write cardio consultation script | NOT STARTED | Chest pain scenario |
-| Write multi-problem follow-up script | NOT STARTED | General scenario |
-| Record ortho script | NOT STARTED | |
-| Record cardio script | NOT STARTED | |
-| Record multi-problem script | NOT STARTED | |
-| Run ortho through full pipeline (both providers) | NOT STARTED | |
-| Run cardio through full pipeline (both providers) | NOT STARTED | |
-| Run multi-problem through full pipeline | NOT STARTED | |
-| Document provider comparison results | NOT STARTED | See comparison section below |
-| Identify and fix issues found | NOT STARTED | |
-
-**Blockers:** Requires all prior phases working.
+**Status:** IN PROGRESS (scripts written, recording + testing pending). Details → [`_plans/phase6/tracker_phase6.md`](phase6/tracker_phase6.md)
 
 ---
 
@@ -153,9 +136,9 @@
 |------|---------|--------|
 | `_plans/masterplan.md` | Detailed project plan | DONE |
 | `_plans/tracker_master.md` | This progress tracker | DONE |
-| `app.py` | Main Streamlit app | DONE (Phase 3) |
+| `app.py` | Main Streamlit app | DONE (Phase 5) |
 | `transcriber.py` | Deepgram + ElevenLabs transcription | DONE (Phase 3) |
-| `note_generator.py` | Claude API note generation | DONE (Phase 4) |
+| `note_generator.py` | Claude API note generation + download formatting | DONE (Phase 5) |
 | `config.py` | Shared config, medical keyterms | DONE |
 | `requirements.txt` | Python dependencies | DONE |
 | `.env` | API keys (placeholder) | DONE |
@@ -165,7 +148,8 @@
 | `_plans/phase2/` | Phase 2 plan + tracker | DONE |
 | `_plans/phase3/` | Phase 3 plan + tracker | DONE |
 | `_plans/phase4/` | Phase 4 plan + tracker | DONE |
-| `_plans/phase5/` | Phase 5 plan + tracker | NOT STARTED |
-| `_plans/phase6/` | Phase 6 plan + tracker | NOT STARTED |
-| `sample_scripts/ortho_knee_pain.md` | Test script | NOT STARTED |
-| `sample_scripts/cardio_chest_pain.md` | Test script | NOT STARTED |
+| `_plans/phase5/` | Phase 5 plan + tracker | N/A (small phase, tracked in master) |
+| `_plans/phase6/` | Phase 6 plan + tracker | DONE |
+| `sample_scripts/ortho_knee_pain.md` | Ortho test script (knee pain, 58yo male) | DONE |
+| `sample_scripts/cardio_chest_pain.md` | Cardio test script (chest pain, 55yo female) | DONE |
+| `sample_scripts/multi_problem_followup.md` | Multi-problem test script (DM + HTN + GERD, 65yo male) | DONE |

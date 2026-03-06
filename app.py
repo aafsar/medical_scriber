@@ -16,7 +16,7 @@ with st.sidebar:
     with st.form("patient_info_form"):
         st.subheader("Patient Information")
         patient_name = st.text_input("Patient Name")
-        dob = st.date_input("Date of Birth", value=None)
+        dob = st.date_input("Date of Birth", value=None, min_value=date(1936, 1, 1))
         dos = st.date_input("Date of Service", value=date.today())
         referring = st.text_input("Referring Physician")
         specialty = st.selectbox("Specialty", SPECIALTIES)
