@@ -16,8 +16,6 @@ from compare import (
 from note_generator import build_download_markdown, generate_notes
 from transcriber import format_transcript_for_llm, transcribe_deepgram, transcribe_elevenlabs
 
-st.set_page_config(page_title="Test Runner — Angy Voice", layout="wide")
-
 # --- Script registry ---
 SCRIPT_REGISTRY = {
     "Ortho — Knee Pain": {

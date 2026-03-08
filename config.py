@@ -18,6 +18,9 @@ DEEPGRAM_API_KEY = _get_secret("DEEPGRAM_API_KEY")
 ELEVENLABS_API_KEY = _get_secret("ELEVENLABS_API_KEY")
 ANTHROPIC_API_KEY = _get_secret("ANTHROPIC_API_KEY")
 
+# App mode: "demo" for clean deployment, "dev" for full dev features
+APP_MODE = _get_secret("APP_MODE") or "dev"
+
 # Model configuration
 DEEPGRAM_MODEL = "nova-2-medical"
 ELEVENLABS_MODEL = "scribe_v2"
