@@ -8,22 +8,22 @@
 
 ## v1 Feature Progress
 
-### Priority 1 — Deploy & Harden
+### Priority 1 — Deploy & Export
 
 | # | Feature | Status | Docs |
 |---|---------|--------|------|
 | v1.1 | Deployment | NOT STARTED | |
+| v1.7 | PDF export | NOT STARTED | |
+
+### Priority 2 — Harden & Expand
+
+| # | Feature | Status | Docs |
+|---|---------|--------|------|
 | v1.2 | Prompt iteration | NOT STARTED | |
 | v1.3 | Error recovery | NOT STARTED | |
 | v1.4 | Cost tracking | NOT STARTED | |
 | v1.5 | Recording consent notice | NOT STARTED | |
-
-### Priority 2 — Core Feature Expansion
-
-| # | Feature | Status | Docs |
-|---|---------|--------|------|
 | v1.6 | Editable notes | NOT STARTED | |
-| v1.7 | PDF export | NOT STARTED | |
 | v1.8 | Persistence | NOT STARTED | |
 | v1.9 | Note accuracy validation | NOT STARTED | |
 | v1.10 | Longer consultation testing | NOT STARTED | |

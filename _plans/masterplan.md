@@ -355,22 +355,22 @@ medical_scriber/
 
 Consolidated backlog for the next version, organized by priority. Items marked *(new)* were identified from Phase 6 testing gaps; the rest carry over from v0's future improvements list.
 
-### Priority 1 — Deploy & Harden
+### Priority 1 — Deploy & Export
 
 | # | Feature | Description | Source |
 |---|---------|-------------|--------|
 | v1.1 | **Deployment** | Deploy to Streamlit Community Cloud (free, trivial for Streamlit apps). Makes the app demable without local setup. | *(new)* |
+| v1.7 | **PDF export** | Generate formatted PDF consultation notes in addition to Markdown. | v0 backlog |
+
+### Priority 2 — Harden & Expand
+
+| # | Feature | Description | Source |
+|---|---------|-------------|--------|
 | v1.2 | **Prompt iteration** | Tune the Claude note-generation prompt based on Phase 6 results — address formatting inconsistencies (prose vs numbered plans), improve sentinel value handling, reduce hallucination risk. | *(new)* |
 | v1.3 | **Error recovery** | Allow retrying note generation from an existing transcript without re-transcribing. Save transcript to session state so the user can re-generate notes if the Claude API call fails. | *(new)* |
 | v1.4 | **Cost tracking** | Log and display per-request API costs (transcription + note generation). Essential for comparing 12+ providers in the evaluation backlog. | *(new)* |
 | v1.5 | **Recording consent notice** | Show a "This consultation will be recorded" prompt before recording starts. Good practice even for a toy project. | *(new)* |
-
-### Priority 2 — Core Feature Expansion
-
-| # | Feature | Description | Source |
-|---|---------|-------------|--------|
 | v1.6 | **Editable notes** | Let the doctor edit each note section inline before downloading. Critical for correcting LLM errors before the note leaves the app. | v0 backlog |
-| v1.7 | **PDF export** | Generate formatted PDF consultation notes in addition to Markdown. | v0 backlog |
 | v1.8 | **Persistence** | SQLite database to store past consultations and notes. Enable retrieval of previous encounters. | v0 backlog |
 | v1.9 | **Note accuracy validation** | Systematically check whether generated notes are faithful to the transcript — detect missed findings, hallucinated details, wrong speaker attribution. Goes beyond Phase 6's term-matching. | *(new)* |
 | v1.10 | **Longer consultation testing** | Test with 15–30 minute audio to verify transcription accuracy, token limits, and note quality don't degrade at realistic consultation lengths. | *(new)* |
