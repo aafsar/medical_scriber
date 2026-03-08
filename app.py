@@ -4,7 +4,7 @@ from datetime import date
 import streamlit as st
 
 from config import ANTHROPIC_API_KEY, DEEPGRAM_API_KEY, ELEVENLABS_API_KEY, SPECIALTIES
-from note_generator import NOTE_SECTIONS, PATIENT_INFO_FIELDS, build_download_markdown, generate_notes
+from note_generator import NOTE_SECTIONS, PATIENT_INFO_FIELDS, build_download_markdown, build_download_pdf, generate_notes
 from transcriber import transcribe_deepgram, transcribe_elevenlabs, format_transcript_for_llm
 
 st.set_page_config(page_title="Angy Voice", layout="wide")
@@ -261,16 +261,33 @@ if st.session_state.get("notes"):
     md_content = build_download_markdown(notes)
     patient_info = st.session_state.get("patient_info", {})
     name = patient_info.get("name", "").strip()
-    dos_str = patient_info.get("date_of_service", "")
+    dos_str = patient_info.get("date_of_service", "").replace("/", "-")
     if name:
-        name_slug = name.lower().replace(" ", "_")
-        file_name = f"{name_slug}_{dos_str}_consultation.md" if dos_str else f"{name_slug}_consultation.md"
+        base_name = name.lower().replace(" ", "_")
+        if dos_str:
+            base_name = f"{base_name}_{dos_str}"
+        base_name = f"{base_name}_consultation"
     else:
-        file_name = "consultation_notes.md"
-    st.download_button(
-        "Download Notes (Markdown)",
-        data=md_content,
-        file_name=file_name,
-        mime="text/markdown",
-        use_container_width=True,
-    )
+        base_name = "consultation_notes"
+
+    dl_col_md, dl_col_pdf = st.columns(2)
+    with dl_col_md:
+        st.download_button(
+            "Download Notes (Markdown)",
+            data=md_content,
+            file_name=f"{base_name}.md",
+            mime="text/markdown",
+            use_container_width=True,
+        )
+    with dl_col_pdf:
+        try:
+            pdf_bytes = build_download_pdf(notes)
+            st.download_button(
+                "Download Notes (PDF)",
+                data=pdf_bytes,
+                file_name=f"{base_name}.pdf",
+                mime="application/pdf",
+                use_container_width=True,
+            )
+        except Exception as e:
+            st.warning(f"PDF generation failed: {e}")

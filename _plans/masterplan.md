@@ -386,6 +386,7 @@ Consolidated backlog for the next version, organized by priority. Items marked *
 | v1.15 | **Real-time transcription** | Stream audio and show a live transcript during the consultation. | v0 backlog |
 | v1.16 | **Local/private mode** | Replace APIs with local Whisper + pyannote so no data leaves the machine. | v0 backlog |
 | v1.17 | **React UI** | Replace Streamlit with React + FastAPI for a production-like interface. | v0 backlog |
+| v1.19 | **Vercel deployment** | Deploy React frontend to Vercel, FastAPI backend to Railway/Render. Requires React UI (v1.17) — Streamlit is incompatible with Vercel's serverless model (no WebSocket support). | *(new)* |
 | v1.18 | **HIPAA compliance** | BAA agreements with API providers, encryption at rest, audit logging. | v0 backlog |
 
 ---

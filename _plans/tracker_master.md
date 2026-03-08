@@ -12,8 +12,8 @@
 
 | # | Feature | Status | Docs |
 |---|---------|--------|------|
-| v1.1 | Deployment | NOT STARTED | |
-| v1.7 | PDF export | NOT STARTED | |
+| v1.1 | Deployment | IN PROGRESS | [plan](features/v1.1_deployment/plan_v1.1.md) |
+| v1.7 | PDF export | DONE | [plan](features/v1.7_pdf_export/plan_v1.7.md) |
 
 ### Priority 2 — Harden & Expand
 
@@ -29,6 +29,7 @@
 | v1.10 | Longer consultation testing | NOT STARTED | |
 | v1.11 | Audio preprocessing | NOT STARTED | |
 | v1.12 | Multi-speaker support (>2) | NOT STARTED | |
+| v1.20 | PDF design polish | NOT STARTED | Improve layout, spacing, typography of PDF export |
 
 ### Priority 3 — Advanced / Architectural
 
@@ -39,6 +40,7 @@
 | v1.15 | Real-time transcription | NOT STARTED | |
 | v1.16 | Local/private mode | NOT STARTED | |
 | v1.17 | React UI | NOT STARTED | |
+| v1.19 | Vercel deployment | NOT STARTED | Depends on v1.17 |
 | v1.18 | HIPAA compliance | NOT STARTED | |
 
 **Status legend:** NOT STARTED | IN PROGRESS | DONE

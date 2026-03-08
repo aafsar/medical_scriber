@@ -28,8 +28,8 @@ Thumbs.db
 *.webm
 *.flac
 
-# Streamlit
-.streamlit/
+# Streamlit secrets (config.toml is committed for theme)
+.streamlit/secrets.toml
 
 # Logs
 *.log

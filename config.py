@@ -1,12 +1,22 @@
 import os
 from dotenv import load_dotenv
+import streamlit as st
 
 load_dotenv()
 
+
+def _get_secret(key: str) -> str | None:
+    """Try st.secrets first (Streamlit Cloud), fall back to .env."""
+    try:
+        return st.secrets[key]
+    except (KeyError, FileNotFoundError):
+        return os.getenv(key)
+
+
 # API Keys
-DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY")
-ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+DEEPGRAM_API_KEY = _get_secret("DEEPGRAM_API_KEY")
+ELEVENLABS_API_KEY = _get_secret("ELEVENLABS_API_KEY")
+ANTHROPIC_API_KEY = _get_secret("ANTHROPIC_API_KEY")
 
 # Model configuration
 DEEPGRAM_MODEL = "nova-2-medical"
