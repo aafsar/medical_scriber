@@ -337,7 +337,7 @@ def build_download_pdf(notes: dict, logo_path: Path | None = None) -> bytes:
         value = notes.get(key, "Not discussed")
         _render_section(pdf, label, value)
 
-    return pdf.output()
+    return bytes(pdf.output())
 
 
 def _validate_note(note: dict) -> dict:

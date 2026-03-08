@@ -164,7 +164,8 @@ if audio:
                     st.warning("No speech detected. Try recording again with a longer or louder consultation.")
                 else:
                     st.session_state.transcript = result
-                    st.session_state.latency_msg = f"Transcribed in {elapsed:.1f}s via {provider}"
+                    if APP_MODE == "dev":
+                        st.session_state.latency_msg = f"Transcribed in {elapsed:.1f}s via {provider}"
                     st.session_state.pop("notes", None)
                     st.session_state.pop("notes_latency_msg", None)
             except (ValueError, RuntimeError) as e:
@@ -199,15 +200,6 @@ if st.session_state.get("transcript"):
                 f'</div>',
                 unsafe_allow_html=True,
             )
-
-    # --- Download Transcript ---
-    st.download_button(
-        "Download Transcript",
-        data=st.session_state.llm_transcript,
-        file_name="transcript.md",
-        mime="text/markdown",
-        use_container_width=True,
-    )
 
     # --- Step 3: Generate Notes ---
     st.divider()
