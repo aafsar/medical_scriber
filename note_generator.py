@@ -4,7 +4,7 @@ from pathlib import Path
 import anthropic
 from fpdf import FPDF
 
-from config import ANTHROPIC_API_KEY, CLAUDE_MODEL
+from config import ANTHROPIC_API_KEY, CLAUDE_MODEL, CLAUDE_MODEL_FAST
 
 NOTE_SECTIONS = (
     ("patient_information", "Patient Information"),
@@ -43,6 +43,12 @@ Never infer, assume, or fabricate any clinical details.
 that the doctor did not explicitly state.
 5. Use the doctor's exact wording for assessment and plan whenever possible.
 6. Preserve medical terminology as spoken.
+7. Apply standard written English formatting to all output: capitalize the \
+first letter of each sentence, capitalize proper nouns (patient names, \
+doctor names, place names, medication brand names), and use correct \
+title capitalization for titles (e.g., "Dr. Patel", not "dr. patel"). \
+Do not change, add, or remove any words — only fix capitalization and \
+punctuation formatting.
 
 OUTPUT FORMAT:
 Return a single JSON object with these keys (all values are strings):
@@ -71,6 +77,47 @@ Return a single JSON object with these keys (all values are strings):
 
 Return ONLY the JSON object. No markdown fences, no extra text.\
 """
+
+
+SPEAKER_DETECTION_PROMPT = """\
+You are analyzing a medical consultation transcript. Two speakers are labeled \
+"Speaker 0" and "Speaker 1". One is the doctor and one is the patient.
+
+Based on the conversation content, determine which speaker number is the doctor. \
+The doctor typically asks clinical questions, performs examinations, makes \
+diagnoses, and prescribes treatments.
+
+Respond with ONLY a single digit: 0 or 1\
+"""
+
+
+def detect_speaker_roles(utterances: list, max_utterances: int = 15) -> int:
+    """Detect which speaker is the doctor via Claude Haiku.
+
+    Returns speaker ID (0 or 1) of the doctor. Defaults to 0 on error.
+    """
+    try:
+        if not utterances or not ANTHROPIC_API_KEY:
+            return 0
+
+        sample = utterances[:max_utterances]
+        lines = []
+        for u in sample:
+            lines.append(f"Speaker {u.speaker}: {u.text}")
+        transcript_text = "\n".join(lines)
+
+        client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+        response = client.messages.create(
+            model=CLAUDE_MODEL_FAST,
+            max_tokens=1,
+            temperature=0.0,
+            system=SPEAKER_DETECTION_PROMPT,
+            messages=[{"role": "user", "content": transcript_text}],
+        )
+        digit = response.content[0].text.strip()
+        return int(digit) if digit in ("0", "1") else 0
+    except Exception:
+        return 0
 
 
 def generate_notes(transcript: str, patient_info: dict | None = None) -> dict:

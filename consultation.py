@@ -4,7 +4,7 @@ from datetime import date
 import streamlit as st
 
 from config import ANTHROPIC_API_KEY, APP_MODE, DEEPGRAM_API_KEY, ELEVENLABS_API_KEY, SPECIALTIES
-from note_generator import NOTE_SECTIONS, PATIENT_INFO_FIELDS, build_download_pdf, generate_notes
+from note_generator import NOTE_SECTIONS, PATIENT_INFO_FIELDS, build_download_pdf, detect_speaker_roles, generate_notes
 from transcriber import transcribe_deepgram, transcribe_elevenlabs, format_transcript_for_llm
 
 st.markdown("""
@@ -89,15 +89,32 @@ with header_right:
 
 st.divider()
 
+# --- Demo defaults for patient info ---
+_DEMO_PATIENT = {
+    "name": "Maria Garcia",
+    "date_of_birth": "04/15/1985",
+    "date_of_service": date.today().strftime("%m/%d/%Y"),
+    "referring_physician": "Dr. James Wilson",
+    "specialty": "Internal Medicine",
+}
+
+if APP_MODE == "demo" and "patient_info" not in st.session_state:
+    st.session_state.patient_info = dict(_DEMO_PATIENT)
+
 # --- Sidebar: patient info form ---
 with st.sidebar:
     with st.form("patient_info_form"):
         st.subheader("Patient Information")
-        patient_name = st.text_input("Patient Name")
-        dob = st.date_input("Date of Birth", value=None, min_value=date(1936, 1, 1))
+        _defaults = st.session_state.get("patient_info", {}) if APP_MODE == "demo" else {}
+        patient_name = st.text_input("Patient Name", value=_defaults.get("name", ""))
+        _default_dob = (
+            date(1985, 4, 15) if APP_MODE == "demo" and not st.session_state.get("_dob_edited") else None
+        )
+        dob = st.date_input("Date of Birth", value=_default_dob, min_value=date(1936, 1, 1))
         dos = st.date_input("Date of Service", value=date.today())
-        referring = st.text_input("Referring Physician")
-        specialty = st.selectbox("Specialty", SPECIALTIES)
+        referring = st.text_input("Referring Physician", value=_defaults.get("referring_physician", ""))
+        _default_specialty_idx = SPECIALTIES.index("Internal Medicine") if APP_MODE == "demo" else 0
+        specialty = st.selectbox("Specialty", SPECIALTIES, index=_default_specialty_idx)
         submitted = st.form_submit_button("Save Patient Info", use_container_width=True)
         if submitted:
             st.session_state.patient_info = {
@@ -168,6 +185,11 @@ if audio:
                         st.session_state.latency_msg = f"Transcribed in {elapsed:.1f}s via {provider}"
                     st.session_state.pop("notes", None)
                     st.session_state.pop("notes_latency_msg", None)
+                    st.session_state.pop("detected_doctor_speaker", None)
+
+                    with st.spinner("Identifying speakers..."):
+                        detected = detect_speaker_roles(st.session_state.transcript)
+                        st.session_state.detected_doctor_speaker = detected
             except (ValueError, RuntimeError) as e:
                 st.error(str(e))
 
@@ -179,7 +201,14 @@ if st.session_state.get("transcript"):
     if st.session_state.get("latency_msg"):
         st.caption(st.session_state.latency_msg)
 
-    role_for_0 = st.radio("Speaker 0 is:", ["Doctor", "Patient"], horizontal=True)
+    detected = st.session_state.get("detected_doctor_speaker", 0)
+    if APP_MODE == "dev":
+        role_for_0 = st.radio(
+            "Speaker 0 is:", ["Doctor", "Patient"],
+            index=(0 if detected == 0 else 1), horizontal=True,
+        )
+    else:
+        role_for_0 = "Doctor" if detected == 0 else "Patient"
     other_role = "Patient" if role_for_0 == "Doctor" else "Doctor"
     speaker_map = {0: role_for_0, 1: other_role}
     st.session_state.speaker_map = speaker_map

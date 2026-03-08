@@ -25,6 +25,7 @@ APP_MODE = _get_secret("APP_MODE") or "dev"
 DEEPGRAM_MODEL = "nova-2-medical"
 ELEVENLABS_MODEL = "scribe_v2"
 CLAUDE_MODEL = "claude-sonnet-4-20250514"
+CLAUDE_MODEL_FAST = "claude-haiku-4-5-20251001"
 
 # Medical keyterms for ElevenLabs (up to 100)
 MEDICAL_KEYTERMS = [
