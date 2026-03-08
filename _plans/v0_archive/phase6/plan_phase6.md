@@ -1,7 +1,7 @@
 # Phase 6: End-to-End Testing — Plan & Context
 
 > **Goal:** Validate the full pipeline (record → transcribe → diarize → label speakers → generate notes → download) with realistic consultation scripts, compare Deepgram vs ElevenLabs, and document results.
-> **Outcome:** [filled after completion]
+> **Outcome:** Testing complete. ElevenLabs wins term accuracy (95% vs 88%) and diarization quality; Deepgram wins latency (26.6s vs 45.0s). No code bugs found. Claude note generation robust against transcription errors.
 
 ---
 
@@ -47,34 +47,70 @@ Terms drawn from `config.py` `MEDICAL_KEYTERMS` and distributed across scripts:
 
 ---
 
-## 3. Testing Protocol
+## 3. Automated Test Runner
 
-For each script (3 scripts x 2 providers = 6 total runs):
+An automated test runner pipeline was added to reduce manual effort. Recording is the only manual step — one button runs both providers, saves all outputs, and generates comparison reports with medical term accuracy metrics.
+
+### Architecture
+
+- **Separate Streamlit page** (`pages/test_runner.py`) — `app.py` untouched. Streamlit auto-detects `pages/` and adds sidebar navigation.
+- **Pure logic module** (`compare.py`) — no Streamlit dependency. Handles script parsing, term checking, report generation.
+- **No changes to production code** — test runner imports from existing `transcriber.py`, `note_generator.py`, `config.py`.
+
+### Design Decisions
+
+| Decision | Choice | Rationale |
+|----------|--------|-----------|
+| Test UI location | `pages/test_runner.py` | Clean separation; `app.py` untouched |
+| Speaker mapping | Auto: `{0: Doctor, 1: Patient}` | All scripts start with Doctor |
+| Patient info | Auto-filled from script registry | Consistency across runs |
+| Term matching | Case-insensitive substring | Specific medical terms won't false-match |
+| Output structure | Timestamped session folders | Multiple test sessions without overwriting |
+
+### Testing Protocol (Automated)
+
+For each script:
 
 1. Record script audio — two people reading Doctor/Patient parts in a quiet environment
-2. Open `streamlit run app.py`
-3. Fill in patient info sidebar (name, DOB, date of service, referring physician, specialty)
-4. Upload recording, select provider (Deepgram or ElevenLabs), click Transcribe
-5. Set Speaker 0 role correctly (Doctor or Patient based on who speaks first)
-6. Review transcript for medical term errors and diarization mistakes
-7. Click Generate Notes
-8. Compare generated note against expected content from script
-9. Download the `.md` file
-10. Record metrics in Phase 6 tracker comparison tables
+2. Run `streamlit run app.py`, navigate to "Test Runner" in sidebar
+3. Select script from dropdown (key terms + patient info auto-populate)
+4. Upload/record audio, click "Run Full Test"
+5. Pipeline runs both Deepgram and ElevenLabs sequentially, generates notes, computes metrics, saves 5 files per script
+6. After all scripts tested, click "Generate Summary" for aggregate `test_summary.md`
+7. Fill Phase 6 tracker comparison tables from summary results
 
-### Metrics
+### Automated Metrics
+
+| Metric | How Measured |
+|--------|-------------|
+| Medical term accuracy | `compare.py` — case-insensitive substring check against "Key terms to verify" from script header |
+| Diarization stats | `compare.py` — Doctor/Patient utterance counts, first-speaker check |
+| Latency | Timed in `pages/test_runner.py` — transcription + note generation separately |
+
+### Manual Metrics (not automated)
 
 | Metric | How to Measure |
 |--------|----------------|
-| Medical term accuracy | Count correctly transcribed keyterms / total keyterms in script |
-| Diarization accuracy | Count correctly attributed utterances / total utterances |
-| Latency | Note the time displayed by the app (transcription + note generation) |
-| Note quality (1-5) | Subjective: completeness, accuracy, formatting, no hallucinations |
+| Note quality (1-5) | Subjective: review saved `*_notes.md` files |
+| Diarization accuracy | Compare saved transcripts side-by-side with original scripts |
+
+### Output Structure
+
+```
+test_results/{YYYY-MM-DD_HHMMSS}/
+  ortho_knee_pain/
+    deepgram_transcript.md
+    deepgram_notes.md
+    elevenlabs_transcript.md
+    elevenlabs_notes.md
+    comparison.md
+  cardio_chest_pain/...
+  multi_problem_followup/...
+  test_summary.md
+```
 
 ---
 
 ## 4. What This Phase Does NOT Do
 
-- No automated tests — all testing is manual with real audio recordings
-- No code changes (unless bugs are found during testing)
 - No new providers — this establishes the Deepgram vs ElevenLabs baseline for future provider evaluation (see `masterplan.md` Section 2.2)

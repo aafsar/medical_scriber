@@ -1,7 +1,7 @@
 # Phase 1: Audio Recording + Deepgram Transcription — Plan & Context
 
 > **Goal:** Build a Streamlit app that records audio via the browser, sends it to Deepgram for transcription with speaker diarization, and displays the diarized transcript.
-> **Outcome:** Implemented. App records audio, sends to Deepgram SDK v5 for diarized transcription, displays Speaker N labels with timestamps. Note: Pydantic v1 warning on Python 3.14 is cosmetic only.
+> **Outcome:** Implemented. App records audio, sends to Deepgram SDK v5 for diarized transcription, displays Speaker N labels with timestamps. Note: Pydantic v0 warning on Python 3.14 is cosmetic only.
 
 ---
 

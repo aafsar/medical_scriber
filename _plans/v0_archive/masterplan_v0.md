@@ -263,31 +263,17 @@ PLAN
 
 ```
 medical_scriber/
-├── _plans/
-│   ├── masterplan.md            # This file (v1 design reference)
-│   ├── tracker_master.md        # v1 feature progress dashboard
-│   ├── features/                # Per-feature plan + tracker folders
-│   │   └── TEMPLATE.md          # Plan + tracker templates
-│   └── v0_archive/              # Completed v0 phase docs (read-only)
-│       ├── README.md
-│       ├── masterplan_v0.md
-│       ├── tracker_master_v0.md
-│       └── phase0/ ... phase6/
-├── app.py                       # Main Streamlit app (UI + orchestration)
-├── pages/
-│   └── test_runner.py           # Automated test UI (dual-provider pipeline)
-├── transcriber.py               # Transcription logic (Deepgram + ElevenLabs)
-├── note_generator.py            # Claude API note generation logic
-├── compare.py                   # Test comparison logic (term accuracy, reports)
-├── config.py                    # Shared config, constants, medical keyterms
-├── requirements.txt             # Python dependencies
-├── .env                         # API keys (not committed)
-├── .gitignore                   # Ignore .env, __pycache__, venv, etc.
-├── sample_scripts/              # Sample consultation scripts for testing
-│   ├── ortho_knee_pain.md
-│   ├── cardio_chest_pain.md
-│   └── multi_problem_followup.md
-└── test_results/                # Saved test run outputs (gitignored)
+├── _plans/masterplan.md      # This file
+├── app.py                   # Main Streamlit app (UI + orchestration)
+├── transcriber.py           # Transcription logic (Deepgram + ElevenLabs)
+├── note_generator.py        # Claude API note generation logic
+├── config.py                # Shared config, constants, medical keyterms
+├── requirements.txt         # Python dependencies
+├── .env                     # API keys (not committed)
+├── .gitignore               # Ignore .env, __pycache__, venv, etc.
+└── sample_scripts/          # Sample consultation scripts for testing
+    ├── ortho_knee_pain.md
+    └── cardio_chest_pain.md
 ```
 
 ---
@@ -343,11 +329,19 @@ medical_scriber/
 
 ---
 
-## 6. Implementation History
+## 6. Implementation Phases
 
-**v0 (Phases 0–6):** Delivered the core pipeline — audio recording, dual-provider transcription (Deepgram + ElevenLabs), speaker diarization, Claude-powered note generation, and end-to-end testing. Completed 2026-03-07. ElevenLabs wins accuracy (95% vs 88%), Deepgram wins latency (26.6s vs 45.0s). See [`v0_archive/README.md`](v0_archive/README.md) for full phase docs and [`v0_archive/tracker_master_v0.md`](v0_archive/tracker_master_v0.md) for detailed results.
+Seven phases (0–6). Each phase has its own plan and tracker under `_plans/phaseN/`. See `tracker_master.md` for task-level status and the decisions log.
 
-**v1:** Feature-based development (v1.1–v1.18). See Section 7 for the full roadmap and `tracker_master.md` for progress.
+| Phase | Goal |
+|-------|------|
+| 0 | Project setup: repo, venv, deps, config, API keys |
+| 1 | Audio recording + Deepgram transcription with diarization |
+| 2 | ElevenLabs transcription + provider comparison |
+| 3 | Speaker role mapping (Speaker 0/1 → Doctor/Patient) |
+| 4 | Claude-powered consultation note generation |
+| 5 | Patient info form, download, error handling, polish |
+| 6 | End-to-end testing with realistic consultation scripts |
 
 ---
 
