@@ -34,5 +34,8 @@ Thumbs.db
 # Logs
 *.log
 
+# Test results
+test_results/
+
 # Claude Code
 CLAUDE.md
