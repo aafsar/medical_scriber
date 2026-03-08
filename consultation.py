@@ -144,7 +144,7 @@ if APP_MODE == "dev":
         else:
             audio = st.file_uploader("Upload audio file", type=["wav", "mp3", "m4a", "ogg", "webm", "flac"])
 else:
-    provider = "ElevenLabs"
+    provider = "Deepgram"
     audio = st.audio_input("Record consultation")
 
 if audio:
