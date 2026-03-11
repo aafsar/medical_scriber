@@ -1,16 +1,12 @@
 import os
 from dotenv import load_dotenv
-import streamlit as st
 
 load_dotenv()
 
 
 def _get_secret(key: str) -> str | None:
-    """Try st.secrets first (Streamlit Cloud), fall back to .env."""
-    try:
-        return st.secrets[key]
-    except (KeyError, FileNotFoundError):
-        return os.getenv(key)
+    """Read secret from environment / .env file."""
+    return os.getenv(key)
 
 
 # API Keys

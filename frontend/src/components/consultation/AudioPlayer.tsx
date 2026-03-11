@@ -17,7 +17,26 @@ export default function AudioPlayer({ blob }: AudioPlayerProps) {
     const audio = new Audio(url);
     audioRef.current = audio;
 
-    audio.addEventListener('loadedmetadata', () => setDuration(audio.duration));
+    const updateDuration = () => {
+      if (Number.isFinite(audio.duration)) {
+        setDuration(audio.duration);
+      }
+    };
+
+    audio.addEventListener('loadedmetadata', () => {
+      updateDuration();
+      // WebM blobs from MediaRecorder often report Infinity duration.
+      // Seeking to the end forces the browser to resolve the real duration.
+      if (!Number.isFinite(audio.duration)) {
+        audio.currentTime = 1e10;
+        audio.addEventListener('seeked', function onSeeked() {
+          updateDuration();
+          audio.currentTime = 0;
+          audio.removeEventListener('seeked', onSeeked);
+        });
+      }
+    });
+    audio.addEventListener('durationchange', updateDuration);
     audio.addEventListener('timeupdate', () => setCurrentTime(audio.currentTime));
     audio.addEventListener('ended', () => setIsPlaying(false));
 
@@ -51,6 +70,7 @@ export default function AudioPlayer({ blob }: AudioPlayerProps) {
   if (!url) return null;
 
   const formatTime = (t: number) => {
+    if (!Number.isFinite(t) || t < 0) return '0:00';
     const m = Math.floor(t / 60);
     const s = Math.floor(t % 60);
     return `${m}:${String(s).padStart(2, '0')}`;
